@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TrexGame.Entities;
 
 namespace TrexGame
 {
@@ -11,6 +12,11 @@ namespace TrexGame
         private const string SFX_BUTTON_PRESS = "button-press";
         private const string SFX_HIT = "hit";
         private const string SFX_SCORE_REACHED = "score-reached";
+        private const int TREX_INITIAL_X = 1;
+        private const int TREX_INITIAL_Y = 82;
+
+        public const int WINDOW_WIDTH = 600;
+        public const int WINDOW_HEIGHT = 150;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -19,6 +25,8 @@ namespace TrexGame
         private SoundEffect _sfxButtonPress;
         private SoundEffect _sfxHit;
         private SoundEffect _sfxScoreReached;
+
+        private Trex _trex;
 
         public TrexRunner()
         {
@@ -29,8 +37,9 @@ namespace TrexGame
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
+            _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
+            _graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -43,7 +52,7 @@ namespace TrexGame
             _sfxHit = Content.Load<SoundEffect>(SFX_HIT);
             _sfxScoreReached = Content.Load<SoundEffect>(SFX_SCORE_REACHED);
 
-            //_testSprite = new(_spriteSheet, 44, 52, 848, 0);
+            _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
         }
 
         protected override void Update(GameTime gameTime)
@@ -58,10 +67,10 @@ namespace TrexGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin();
-
+            _trex.Draw(gameTime, _spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

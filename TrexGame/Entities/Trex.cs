@@ -21,7 +21,9 @@ namespace TrexGame.Entities
         private TrexState _state;
         private Vector2 _position;
         private int _drawOrder;
-        private Sprite _sprite;
+        private readonly Sprite _sprite;
+        private static readonly Rectangle _idleSpriteEyeOpen = new(848, 0, 44, 52);
+        private static readonly Rectangle _idleSpriteEyeClosed = new(892, 0, 44, 52);
 
         public float Speed
         {
@@ -41,9 +43,12 @@ namespace TrexGame.Entities
             set => _drawOrder = value;
         }
 
-        public Trex()
+        public Trex(Texture2D spriteSheet, Vector2 initialPosition)
         {
             _state = TrexState.Idle;
+            _sprite = new(spriteSheet, _idleSpriteEyeOpen);
+            _position = initialPosition;
+            _drawOrder = 10;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

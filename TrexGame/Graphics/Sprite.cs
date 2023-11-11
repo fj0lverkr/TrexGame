@@ -53,6 +53,24 @@ namespace TrexGame.Graphics
             TintColor = Color.White;
         }
 
+        public Sprite(Texture2D texture, Rectangle dimensions)
+        {
+            _texture = texture;
+            Width = dimensions.Width;
+            Height = dimensions.Height;
+            X = dimensions.X;
+            Y = dimensions.Y;
+            TintColor = Color.White;
+        }
+
+        public void UpdateDimensions(Rectangle dimensions)
+        {
+            Width = dimensions.Width;
+            Height = dimensions.Height;
+            X = dimensions.X;
+            Y = dimensions.Y;
+        }
+
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             spriteBatch.Draw(_texture, position, new(X, Y, Width, Height), TintColor);
