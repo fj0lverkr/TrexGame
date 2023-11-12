@@ -63,6 +63,14 @@ namespace TrexGame.Graphics
             }
         }
 
+        public void ChangeFrameDuration(int index, float newDuration)
+        {
+            if (newDuration <= 0)
+                return;
+            AnimatedSpriteFrame frame = GetFrame(index);
+            frame.Duration = newDuration;
+        }
+
         public void AddFrame(Sprite sprite, float duration)
         {
             AnimatedSpriteFrame prevFrame = _frames.Count == 0 ? null : _frames.Where(f => f.IsLastFrame).FirstOrDefault();
@@ -78,7 +86,15 @@ namespace TrexGame.Graphics
                 Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (Progress >= Duration)
                 {
-                    Progress -= Duration;
+                    if (IsInfinite)
+                    {
+                        Progress -= Duration;
+                    }
+                    else
+                    {
+                        Stop();
+                    }
+
                 }
             }
         }

@@ -7,7 +7,7 @@
 
         public Sprite Sprite { get; set; }
 
-        public float Duration { get; }
+        public float Duration { get; set; }
 
         public float TimeStamp
         {

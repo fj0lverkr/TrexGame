@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using TrexGame.Graphics;
 using TrexGame.Interfaces;
@@ -23,7 +24,7 @@ namespace TrexGame.Entities
         private Vector2 _position;
         private int _drawOrder;
         private readonly Texture2D _spriteSheet;
-        private AnimatedSprite _idleAnimation;
+        private AnimatedSprite _spriteAnimation;
         private static readonly List<Rectangle> _idleSprites = new() { new(848, 0, 44, 52), new(892, 0, 44, 52) };
         private static readonly List<Rectangle> _runSprites = new() { new(936, 0, 44, 52), new(980, 0, 44, 52) };
         private static readonly List<Rectangle> _deadSprites = new() { new(1024, 0, 44, 52), new(1068, 0, 44, 52) };
@@ -55,13 +56,15 @@ namespace TrexGame.Entities
             SetState(TrexState.Idle);
         }
 
-        private void SetState(TrexState state)
+        public void SetState(TrexState state)
         {
             _state = state;
             List<AnimatedSpriteFrame> frames = new();
+            bool repeatAnimation = true;
             switch (state)
             {
                 case TrexState.Idle:
+                    repeatAnimation = false;
                     Sprite idle1 = new(_spriteSheet, _idleSprites[0]);
                     Sprite idle2 = new(_spriteSheet, _idleSprites[1]);
                     frames = new() { new(idle1, 2f), new(idle2, .2f) };
@@ -79,23 +82,30 @@ namespace TrexGame.Entities
 
             }
 
-            _idleAnimation = new(true, frames);
+            _spriteAnimation = new(repeatAnimation, frames);
+            _spriteAnimation.Play();
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _idleAnimation.Play();
-            _idleAnimation.Draw(spriteBatch, Position);
+            _spriteAnimation.Draw(spriteBatch, Position);
         }
 
         public void Update(GameTime gameTime)
         {
-            _idleAnimation.Update(gameTime);
+            if (_state == TrexState.Idle && !_spriteAnimation.IsPlaying)
+            {
+                float newDuration = (float)new Random().NextDouble() * 9 + 1;
+                _spriteAnimation.ChangeFrameDuration(0, newDuration);
+                _spriteAnimation.Play();
+            }
+
+            _spriteAnimation.Update(gameTime);
         }
 
         public void Start()
         {
-            _state = TrexState.Running;
+            SetState(TrexState.Running);
         }
 
         public void Jump()

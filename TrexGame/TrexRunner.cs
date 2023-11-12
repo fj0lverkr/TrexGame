@@ -72,9 +72,10 @@ namespace TrexGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (_gameStarted)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                _entityManager.Remove(_idleTrexBackground);
+                _gameStarted = true;
+                _trex.SetState(TrexState.Running);
             }
 
             _trex.Update(gameTime);
