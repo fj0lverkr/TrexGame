@@ -78,6 +78,8 @@ namespace TrexGame
             }
 
             _trex.Update(gameTime);
+            if (_trex.State != TrexState.Idle)
+                _entityManager.Remove(_idleTrexBackground);
 
             base.Update(gameTime);
         }
