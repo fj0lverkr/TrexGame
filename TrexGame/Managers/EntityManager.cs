@@ -8,7 +8,7 @@ namespace TrexGame.Managers
 {
     public class EntityManager
     {
-        private List<IGameEntity> _entities;
+        private readonly List<IGameEntity> _entities;
 
         public List<IGameEntity> GameEntities
         {
@@ -23,6 +23,11 @@ namespace TrexGame.Managers
         public void Add(IGameEntity entity)
         {
             _entities.Add(entity);
+        }
+
+        public void Add(List<IGameEntity> entities)
+        {
+            _entities.AddRange(entities);
         }
 
         public void Remove(IGameEntity entity)

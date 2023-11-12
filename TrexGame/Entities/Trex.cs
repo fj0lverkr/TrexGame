@@ -22,6 +22,7 @@ namespace TrexGame.Entities
         private Vector2 _position;
         private int _drawOrder;
         private readonly Sprite _sprite;
+        private AnimatedSprite _idleAnimation;
         private static readonly Rectangle[] _idleSprites = { new(848, 0, 44, 52), new(892, 0, 44, 52) };
         private static readonly Rectangle[] _runSprites = { new(936, 0, 44, 52), new(980, 0, 44, 52) };
         private static readonly Rectangle[] _deadSprites = { new(1024, 0, 44, 52), new(1068, 0, 44, 52) };
@@ -48,19 +49,23 @@ namespace TrexGame.Entities
         public Trex(Texture2D spriteSheet, Vector2 initialPosition)
         {
             _state = TrexState.Idle;
-            _sprite = new(spriteSheet, _idleSprites[0]);
+            Sprite idle1 = new(spriteSheet, _idleSprites[0]);
+            Sprite idle2 = new(spriteSheet, _idleSprites[1]);
             _position = initialPosition;
             _drawOrder = 10;
+            _idleAnimation = new(true, new() { new(idle1, 2), new(idle2, .2f) });
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch, Position);
+            //_sprite.Draw(spriteBatch, Position);
+            _idleAnimation.Play();
+            _idleAnimation.Draw(spriteBatch, Position);
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new System.NotImplementedException();
+            _idleAnimation.Update(gameTime);
         }
 
         public void Start()

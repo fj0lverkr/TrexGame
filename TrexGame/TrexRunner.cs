@@ -2,7 +2,10 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using TrexGame.Entities;
+using TrexGame.Interfaces;
+using TrexGame.Managers;
 
 namespace TrexGame
 {
@@ -27,6 +30,10 @@ namespace TrexGame
         private SoundEffect _sfxScoreReached;
 
         private Trex _trex;
+        private IdleTrexBackground _idleTrexBackground;
+        private EntityManager _entityManager;
+
+        private bool _gameStarted = false;
 
         public TrexRunner()
         {
@@ -46,6 +53,7 @@ namespace TrexGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _entityManager = new();
 
             _spriteSheet = Content.Load<Texture2D>(GFX_SPRITESHEET);
             _sfxButtonPress = Content.Load<SoundEffect>(SFX_BUTTON_PRESS);
@@ -53,6 +61,10 @@ namespace TrexGame
             _sfxScoreReached = Content.Load<SoundEffect>(SFX_SCORE_REACHED);
 
             _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
+            _idleTrexBackground = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
+
+            _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground });
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -60,7 +72,12 @@ namespace TrexGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            if (_gameStarted)
+            {
+                _entityManager.Remove(_idleTrexBackground);
+            }
+
+            _trex.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -70,7 +87,7 @@ namespace TrexGame
             GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin();
-            _trex.Draw(gameTime, _spriteBatch);
+            _entityManager.Draw(gameTime, _spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
