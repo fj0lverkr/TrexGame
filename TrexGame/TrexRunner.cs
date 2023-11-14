@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using TrexGame.Controllers;
 using TrexGame.Entities;
 using TrexGame.Interfaces;
 using TrexGame.Managers;
@@ -32,6 +33,7 @@ namespace TrexGame
         private Trex _trex;
         private IdleTrexBackground _idleTrexBackground;
         private EntityManager _entityManager;
+        private InputController _inputController;
 
         private bool _gameStarted = false;
 
@@ -60,10 +62,12 @@ namespace TrexGame
             _sfxHit = Content.Load<SoundEffect>(SFX_HIT);
             _sfxScoreReached = Content.Load<SoundEffect>(SFX_SCORE_REACHED);
 
-            _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
+            _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y), _sfxButtonPress);
             _idleTrexBackground = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
 
             _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground });
+
+            _inputController = new(_trex);
 
         }
 
@@ -72,7 +76,7 @@ namespace TrexGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && !_gameStarted)
             {
                 _gameStarted = true;
                 _trex.SetState(TrexState.Running);
@@ -81,6 +85,9 @@ namespace TrexGame
             _trex.Update(gameTime);
             if (_trex.State != TrexState.Idle)
                 _entityManager.Remove(_idleTrexBackground);
+
+            if (_gameStarted)
+                _inputController.Process(gameTime);
 
             base.Update(gameTime);
         }

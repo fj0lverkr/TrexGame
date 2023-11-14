@@ -14,7 +14,7 @@ namespace TrexGame.Graphics
 
         public float Progress { get; private set; } = 0f;
 
-        public bool IsInfinite { get; }
+        public bool IsInfinite { get; private set; }
 
         public AnimatedSpriteFrame this[int index]
         {
@@ -113,6 +113,15 @@ namespace TrexGame.Graphics
         {
             IsPlaying = false;
             Progress = 0f;
+        }
+
+        public void ChangeFrames(List<AnimatedSpriteFrame> frames, bool infinite = true)
+        {
+            if (IsPlaying)
+                Stop();
+            _frames.Clear();
+            frames.ForEach(f => AddFrame(f.Sprite, f.Duration));
+            IsInfinite = infinite;
         }
     }
 }
