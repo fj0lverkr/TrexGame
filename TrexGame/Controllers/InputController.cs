@@ -18,13 +18,21 @@ namespace TrexGame.Controllers
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Space) && !_previousKeyboardState.IsKeyDown(Keys.Space) && _trex.State != TrexState.Jumping)
+            if (keyboardState.IsKeyDown(Keys.Space) && !_previousKeyboardState.IsKeyDown(Keys.Space) && _trex.State == TrexState.Running)
             {
-                _trex.StartJump();
+                _trex.Jump();
             }
             else if (keyboardState.IsKeyUp(Keys.Space) && _trex.State == TrexState.Jumping)
             {
-                _trex.CancelJump();
+                _trex.Fall();
+            }
+            else if (keyboardState.IsKeyDown(Keys.LeftControl))
+            {
+                _trex.Duck();
+            }
+            else if (keyboardState.IsKeyUp(Keys.LeftControl) && _previousKeyboardState.IsKeyDown(Keys.LeftControl))
+            {
+                _trex.Rise();
             }
 
             _previousKeyboardState = keyboardState;

@@ -15,7 +15,6 @@ namespace TrexGame.Entities
         Jumping,
         Falling,
         Ducking,
-        Dropping,
         Dead
     }
 
@@ -77,6 +76,14 @@ namespace TrexGame.Entities
                         frames.Add(new(s, 5 / Speed));
                     });
                     break;
+
+                case TrexState.Ducking:
+                    _duckSprites.ForEach(r =>
+                    {
+                        Sprite s = new(_spriteSheet, r);
+                        frames.Add(new(s, 5 / Speed));
+                    });
+                    break;
                 case TrexState.Dead:
                     repeatAnimation = false;
                     _deadSprites.ForEach(r =>
@@ -85,7 +92,6 @@ namespace TrexGame.Entities
                         frames.Add(new(s, 0.5f));
                     });
                     break;
-                //TODO add cases for other states and handle default case with an exception.
                 default:
                     break;
 
@@ -139,7 +145,7 @@ namespace TrexGame.Entities
             SetState(TrexState.Running);
         }
 
-        public bool StartJump()
+        public bool Jump()
         {
             if (State == TrexState.Jumping || State == TrexState.Falling)
                 return false;
@@ -149,7 +155,7 @@ namespace TrexGame.Entities
             return true;
         }
 
-        public bool CancelJump()
+        public bool Fall()
         {
             if (State != TrexState.Jumping || _initialPosition.Y - Position.Y < MINIMUM_JUMP_HEIGHT)
                 return false;
@@ -159,14 +165,21 @@ namespace TrexGame.Entities
             return true;
         }
 
-        public void Duck()
+        public bool Duck()
         {
-            State = TrexState.Ducking;
+            if (State == TrexState.Ducking)
+                return false;
+            _jumpSound.Play();
+            SetState(TrexState.Ducking);
+            return true;
         }
 
-        public void Drop()
+        public bool Rise()
         {
-            State = TrexState.Dropping;
+            if (State != TrexState.Ducking)
+                return false;
+            SetState(TrexState.Running);
+            return true;
         }
 
         public void Die()
