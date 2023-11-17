@@ -19,8 +19,8 @@ namespace TrexGame.Controllers
             KeyboardState keyboardState = Keyboard.GetState();
             bool isJumpKeyDown = keyboardState.IsKeyDown(Keys.Space) || keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W);
             bool wasJumpKeyDown = _previousKeyboardState.IsKeyDown(Keys.Space) || _previousKeyboardState.IsKeyDown(Keys.Up) || _previousKeyboardState.IsKeyDown(Keys.W);
-            bool isCrouchKeyDown = keyboardState.IsKeyDown(Keys.LeftControl) || keyboardState.IsKeyDown(Keys.S);
-            bool wasCrouchKeyDown = _previousKeyboardState.IsKeyDown(Keys.LeftControl) || _previousKeyboardState.IsKeyDown(Keys.S);
+            bool isCrouchKeyDown = keyboardState.IsKeyDown(Keys.LeftControl) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S);
+            bool wasCrouchKeyDown = _previousKeyboardState.IsKeyDown(Keys.LeftControl) || _previousKeyboardState.IsKeyDown(Keys.Down) || _previousKeyboardState.IsKeyDown(Keys.S);
 
             if (isJumpKeyDown && !wasJumpKeyDown && _trex.State == TrexState.Running)
             {
