@@ -1,6 +1,6 @@
 ﻿namespace TrexGame.Graphics
 {
-    public class AnimatedSpriteFrame
+    internal class AnimatedSpriteFrame
     {
         private readonly AnimatedSpriteFrame _previousFrame;
         private AnimatedSpriteFrame _nextFrame;

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace TrexGame.Graphics
 {
-    public class AnimatedSprite
+    internal class AnimatedSprite
     {
         private readonly List<AnimatedSpriteFrame> _frames = new();
 

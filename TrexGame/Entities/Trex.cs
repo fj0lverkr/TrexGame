@@ -8,7 +8,7 @@ using TrexGame.Interfaces;
 
 namespace TrexGame.Entities
 {
-    public enum TrexState
+    internal enum TrexState
     {
         Idle,
         Running,
@@ -18,7 +18,7 @@ namespace TrexGame.Entities
         Dead
     }
 
-    public class Trex : IGameEntity
+    internal class Trex : IGameEntity
     {
         private const float RANDOM_FRAME_MIN_DURATION = 2f;
         private const float RANDOM_FRAME_MAX_DURATION = 10f;
@@ -39,18 +39,19 @@ namespace TrexGame.Entities
         private AnimatedSprite _spriteAnimation;
         private float _verticalVelocity;
 
-        public float Speed { get; set; } = 20f;
+        public float Speed { get; set; }
         public TrexState State { get; private set; }
         public Vector2 Position { get; set; }
         public int DrawOrder { get; set; }
 
-        public Trex(Texture2D spriteSheet, Vector2 initialPosition, SoundEffect jumpSound)
+        public Trex(Texture2D spriteSheet, Vector2 initialPosition, SoundEffect jumpSound, float initialSpeed)
         {
             _spriteSheet = spriteSheet;
             _initialPosition = initialPosition;
             Position = initialPosition;
             _jumpSound = jumpSound;
-            DrawOrder = 10;
+            Speed = initialSpeed;
+            DrawOrder = 0;
             SetState(TrexState.Idle);
         }
 

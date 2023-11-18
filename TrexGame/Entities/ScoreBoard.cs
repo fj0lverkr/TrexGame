@@ -5,7 +5,7 @@ using TrexGame.Interfaces;
 
 namespace TrexGame.Entities
 {
-    public class ScoreBoard : IGameEntity
+    internal class ScoreBoard : IGameEntity
     {
         private int _drawOrder;
         private int _score;

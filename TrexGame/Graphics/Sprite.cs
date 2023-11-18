@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TrexGame.Graphics
 {
-    public class Sprite
+    internal class Sprite
     {
         private readonly Texture2D _texture;
         private int _width;
@@ -73,7 +73,16 @@ namespace TrexGame.Graphics
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            spriteBatch.Draw(_texture, position, new(X, Y, Width, Height), TintColor);
+            Rectangle source = new(X, Y, Width, Height);
+            spriteBatch.Draw(_texture, position, source, TintColor);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 scale, bool flipX = false, bool flipY = false)
+        {
+            Rectangle destination = new((int)position.X, (int)position.Y, (int)scale.X, (int)scale.Y);
+            Rectangle source = new(X, Y, Width, Height);
+            SpriteEffects effect = flipX ? SpriteEffects.FlipHorizontally : flipY ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            spriteBatch.Draw(_texture, destination, source, TintColor, 0f, new(0), effect, 0f);
         }
     }
 }

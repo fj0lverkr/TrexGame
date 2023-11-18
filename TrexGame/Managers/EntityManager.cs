@@ -6,7 +6,7 @@ using TrexGame.Interfaces;
 
 namespace TrexGame.Managers
 {
-    public class EntityManager
+    internal class EntityManager
     {
         private readonly List<IGameEntity> _entities;
 

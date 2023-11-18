@@ -4,7 +4,7 @@ using TrexGame.Entities;
 
 namespace TrexGame.Controllers
 {
-    public class InputController
+    internal class InputController
     {
         private Trex _trex;
         private KeyboardState _previousKeyboardState;
@@ -30,7 +30,7 @@ namespace TrexGame.Controllers
             {
                 _trex.Fall();
             }
-            else if (isCrouchKeyDown)
+            else if (isCrouchKeyDown && _trex.State == TrexState.Running)
             {
                 _trex.Duck();
             }

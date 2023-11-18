@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using TrexGame.Graphics;
 using TrexGame.Interfaces;
 
 namespace TrexGame.Entities
 {
-    public class IdleTrexBackground : IGameEntity
+    internal class IdleTrexBackground : IGameEntity
     {
         private Vector2 _position;
         private int _drawOrder;
@@ -33,7 +32,7 @@ namespace TrexGame.Entities
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

@@ -34,8 +34,11 @@ namespace TrexGame
         private IdleTrexBackground _idleTrexBackground;
         private EntityManager _entityManager;
         private InputController _inputController;
+        private GroundManager _groundManager;
+        private CloudManager _cloudManager;
 
         private bool _gameStarted = false;
+        private float _gameSpeed = 50f;
 
         public TrexRunner()
         {
@@ -62,10 +65,12 @@ namespace TrexGame
             _sfxHit = Content.Load<SoundEffect>(SFX_HIT);
             _sfxScoreReached = Content.Load<SoundEffect>(SFX_SCORE_REACHED);
 
-            _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y), _sfxButtonPress);
+            _trex = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y), _sfxButtonPress, _gameSpeed);
             _idleTrexBackground = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
+            _groundManager = new(_spriteSheet, _gameSpeed);
+            _cloudManager = new(_spriteSheet, _gameSpeed, WINDOW_WIDTH, WINDOW_HEIGHT / 3 * 2);
 
-            _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground });
+            _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground, _groundManager, _cloudManager });
 
             _inputController = new(_trex);
 
@@ -82,9 +87,13 @@ namespace TrexGame
                 _trex.SetState(TrexState.Running);
             }
 
-            _trex.Update(gameTime);
+            _entityManager.Update(gameTime);
             if (_trex.State != TrexState.Idle)
+            {
                 _entityManager.Remove(_idleTrexBackground);
+                _groundManager.IsRunning = true;
+            }
+
 
             if (_gameStarted)
                 _inputController.Process(gameTime);
