@@ -92,6 +92,7 @@ namespace TrexGame
             {
                 _entityManager.Remove(_idleTrexBackground);
                 _groundManager.IsRunning = true;
+                _cloudManager.IsRunning = true;
             }
 
 
