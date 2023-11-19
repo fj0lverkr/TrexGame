@@ -36,6 +36,7 @@ namespace TrexGame
         private InputController _inputController;
         private GroundManager _groundManager;
         private CloudManager _cloudManager;
+        private PteroManager _pteroManager;
 
         private bool _gameStarted = false;
         private float _gameSpeed = 50f;
@@ -69,8 +70,9 @@ namespace TrexGame
             _idleTrexBackground = new(_spriteSheet, new(TREX_INITIAL_X, TREX_INITIAL_Y));
             _groundManager = new(_spriteSheet, _gameSpeed);
             _cloudManager = new(_spriteSheet, _gameSpeed, WINDOW_WIDTH, WINDOW_HEIGHT / 3 * 2);
+            _pteroManager = new(_spriteSheet, _gameSpeed, WINDOW_WIDTH, WINDOW_HEIGHT / 3 * 2);
 
-            _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground, _groundManager, _cloudManager });
+            _entityManager.Add(new List<IGameEntity> { _trex, _idleTrexBackground, _groundManager, _cloudManager, _pteroManager });
 
             _inputController = new(_trex);
 
@@ -85,14 +87,15 @@ namespace TrexGame
             {
                 _gameStarted = true;
                 _trex.SetState(TrexState.Running);
+                _groundManager.IsRunning = true;
+                _cloudManager.IsRunning = true;
+                _pteroManager.IsRunning = true;
             }
 
             _entityManager.Update(gameTime);
             if (_trex.State != TrexState.Idle)
             {
                 _entityManager.Remove(_idleTrexBackground);
-                _groundManager.IsRunning = true;
-                _cloudManager.IsRunning = true;
             }
 
 
