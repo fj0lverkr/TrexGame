@@ -10,6 +10,7 @@ namespace TrexGame.Graphics
 
         public float PositionX { get; set; }
         public int DrawOrder { get; set; }
+        public float Speed { get; set; }
 
         public GroundTile(float positionX, Sprite groundSprite, int drawOrder)
         {

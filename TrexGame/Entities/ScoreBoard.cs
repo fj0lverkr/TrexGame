@@ -7,27 +7,10 @@ namespace TrexGame.Entities
 {
     internal class ScoreBoard : IGameEntity
     {
-        private int _drawOrder;
-        private int _score;
-        private int _highScore;
-
-        public int DrawOrder
-        {
-            get => _drawOrder;
-            set => _drawOrder = value;
-        }
-
-        public int Score
-        {
-            get => _score;
-            set => _score = value;
-        }
-
-        public int HighScore
-        {
-            get => _highScore;
-            set => _highScore = value;
-        }
+        public int DrawOrder { get; set; }
+        public float Speed { get; set; }
+        public int Score { get; set; }
+        public int HighScore { get; set; }
 
         public ScoreBoard()
         {

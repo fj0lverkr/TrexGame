@@ -40,6 +40,11 @@ namespace TrexGame.Managers
             _entities.Clear();
         }
 
+        public void UpdateGameSpeed(float speed)
+        {
+            _entities.ForEach(e => { e.Speed = speed; });
+        }
+
         public void Update(GameTime gameTime)
         {
             _entities.ForEach(x => x.Update(gameTime));

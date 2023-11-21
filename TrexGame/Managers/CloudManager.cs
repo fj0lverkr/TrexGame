@@ -15,17 +15,16 @@ namespace TrexGame.Managers
         private readonly Texture2D _spriteSheet;
         private readonly int _skyWidth;
         private readonly int _skyHeight;
-
-        private List<CloudTile> _cloudTiles;
-        private float _speed;
+        private readonly List<CloudTile> _cloudTiles;
 
         public int DrawOrder { get; set; }
+        public float Speed { get; set; }
         public bool IsRunning { get; set; }
 
         public CloudManager(Texture2D spriteSeet, float gameSpeed, int skyWidth, int skyHeight)
         {
             _spriteSheet = spriteSeet;
-            _speed = gameSpeed;
+            Speed = gameSpeed;
             _skyWidth = skyWidth;
             _skyHeight = skyHeight;
             _cloudTiles = new();
@@ -41,7 +40,7 @@ namespace TrexGame.Managers
 
         public void Update(GameTime gameTime)
         {
-            float cloudSpeed = IsRunning ? _speed * 2.5f : _speed / 2;
+            float cloudSpeed = IsRunning ? Speed * 2.5f : Speed / 2;
             _cloudTiles.ForEach(tile =>
             {
                 if (tile.PositionX <= 0)

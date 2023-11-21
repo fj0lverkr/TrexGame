@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TrexGame.Entities;
 using TrexGame.Interfaces;
 
@@ -10,18 +9,18 @@ namespace TrexGame.Managers
 {
     internal class PteroManager : IGameEntity
     {
-        private const int MIN_PTEROS = 0;
         private const int MAX_PTEROS = 2;
         private const int PTERO_WIDTH = 46;
 
         private readonly Texture2D _spriteSheet;
         private readonly int _skyWidth;
         private readonly int _skyHeight;
+        private readonly List<Pterodactyl> _pteros;
 
-        private List<Pterodactyl> _pteros;
-        private float _speed;
+        private double _lastSpawnTimeStamp;
 
         public int DrawOrder { get; set; }
+        public float Speed { get; set; }
         public bool IsRunning { get; set; }
 
         public PteroManager(Texture2D spriteSheet, float gameSpeed, int skyWidth, int skyHeight)
@@ -30,7 +29,7 @@ namespace TrexGame.Managers
             _skyWidth = skyWidth;
             _skyHeight = skyHeight;
             _pteros = new();
-            _speed = gameSpeed;
+            Speed = gameSpeed;
             IsRunning = false;
         }
 
@@ -41,38 +40,40 @@ namespace TrexGame.Managers
 
         public void Update(GameTime gameTime)
         {
-            float flySpeed = _speed * 2.5f;
+            float flySpeed = Speed * 2.5f;
             if (IsRunning)
             {
                 if (_pteros.Count > 0)
                 {
                     if (_pteros[0].Position.X <= 0)
-                        SpawnPteros();
-                    if (_pteros[0].Position.Y <= -PTERO_WIDTH)
+                        SpawnPteros(gameTime);
+                    if (_pteros[0].Position.X <= -PTERO_WIDTH)
                         _pteros.RemoveAt(0);
                     _pteros.ForEach(p => { p.PositionX -= flySpeed * (float)gameTime.ElapsedGameTime.TotalSeconds; });
                 }
                 else
                 {
-                    SpawnPteros();
+                    SpawnPteros(gameTime);
                 }
             }
             _pteros.ForEach(p => { p.Update(gameTime); });
         }
 
-        private void SpawnPteros()
+        private void SpawnPteros(GameTime gameTime)
         {
-            Debug.WriteLine("spawnattempt");
-            bool doSpawn = new Random().Next(0, 200 / (int)_speed) < 100 && IsRunning && _pteros.Count < MAX_PTEROS;
+            double delta = gameTime.TotalGameTime.TotalSeconds - _lastSpawnTimeStamp;
+            double minDelta = (new Random().NextDouble() + 1) * 1000 / Speed;
+            bool doSpawn = delta >= minDelta && IsRunning && _pteros.Count < MAX_PTEROS;
             if (doSpawn)
             {
-                int numInitialPteros = new Random().Next(MIN_PTEROS + 1, MAX_PTEROS);
-                for (int i = 0; i < numInitialPteros; i++)
+                int numPteros = new Random().Next(MAX_PTEROS);
+                for (int i = 0; i < numPteros; i++)
                 {
                     DrawOrder = i + 1;
-                    int y = new Random().Next(_skyHeight + 5);
-                    Vector2 pteroPos = new(_skyWidth + 5, y);
-                    _pteros.Add(new(DrawOrder, pteroPos, _spriteSheet, _speed));
+                    int y = new Random().Next(_skyHeight);
+                    Vector2 pteroPos = new(_skyWidth + 15 * (i + 1), y);
+                    _pteros.Add(new(DrawOrder, pteroPos, _spriteSheet, Speed));
+                    _lastSpawnTimeStamp = gameTime.TotalGameTime.TotalSeconds;
                 }
             }
         }

@@ -7,9 +7,9 @@ namespace TrexGame.Graphics
 {
     internal class CloudTile : IGameEntity
     {
-        private const int SPRITE_WIDTH = 46;
-        private const int SPRITE_HEIGHT = 44;
-        private const int SPRITE_X = 86;
+        private const int SPRITE_WIDTH = 47;
+        private const int SPRITE_HEIGHT = 14;
+        private const int SPRITE_X = 85;
         private const int SPRITE_Y = 2;
         private const int SPRITE_SIZES = 3;
 
@@ -23,6 +23,7 @@ namespace TrexGame.Graphics
         public float PositionY { get; set; }
         public float TileSizeFactor { get; private set; }
         public Vector2 Scale { get; private set; }
+        public float Speed { get; set; }
 
         public CloudTile(int drawOrder, Vector2 position, Texture2D spriteSheet)
         {

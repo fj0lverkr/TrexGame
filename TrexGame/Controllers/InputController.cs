@@ -6,7 +6,7 @@ namespace TrexGame.Controllers
 {
     internal class InputController
     {
-        private Trex _trex;
+        private readonly Trex _trex;
         private KeyboardState _previousKeyboardState;
 
         public InputController(Trex trex)
